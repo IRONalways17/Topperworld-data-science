@@ -1,0 +1,42 @@
+HTML/CSS/JavaScript (frontend):
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lane Lines Detection</title>
+    <style>
+        #image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #image-container img {
+            max-width: 100%;
+            max-height: 80vh;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lane Lines Detection</h1>
+    <input type="file" accept="image/*" id="file-input">
+    <div id="image-container"></div>
+    <script>
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    document.getElementById('image-container').innerHTML = '';
+                    document.getElementById('image-container').appendChild(img);
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>

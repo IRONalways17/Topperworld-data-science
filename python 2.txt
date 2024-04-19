@@ -1,0 +1,35 @@
+python 2
+
+# Install Surprise library using pip: pip install scikit-surprise
+from surprise import Dataset, Reader, SVD
+from surprise.model_selection import train_test_split
+from surprise.accuracy import rmse
+
+# Load data
+reader = Reader(line_format='user item rating', sep=',', rating_scale=(1, 5))
+data = Dataset.load_from_file('path_to_data.csv', reader=reader)
+
+# Split data into train and test sets
+trainset, testset = train_test_split(data, test_size=0.2)
+
+# Train SVD algorithm
+algo = SVD()
+algo.fit(trainset)
+
+# Test the algorithm
+predictions = algo.test(testset)
+
+# Evaluate the algorithm
+accuracy = rmse(predictions)
+print('RMSE:', accuracy)
+
+# Generate recommendations for a user
+user_id = 'user_id'
+top_n = 10
+recommendations = {}
+for uid in testset:
+    if uid[0] == user_id:
+        user_recommendations = algo.get_top_n(testset, n=top_n)
+        recommendations[uid[0]] = [iid for (iid, _) in user_recommendations]
+
+print('Recommendations for user', user_id, ':', recommendations[user_id])
